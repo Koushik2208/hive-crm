@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Typography */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+
+  /* Palette */
+  --color-primary: #32172a;
+  --color-primary-container: #4a2c40;
+  --color-secondary: #6c538b;
+  --color-tertiary-text: #281f0a;
+  --color-tertiary-fixed: #d6c4a5;
+  --color-on-tertiary-fixed: #281f0a;
+
+  /* Surfaces & Backgrounds */
+  --color-surface: #faf9f6;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-bright: #ffffff;
+
+  /* Ghost/Subtle Definitions */
+  --color-outline-variant: #d1c3c9;
+
+  /* Elevation / Shadows */
+  --shadow-ambient: 0px 12px 32px rgba(78, 68, 73, 0.06);
+
+  /* Radii */
+  --radius-xl: 0.75rem;
+
+  /* Gradients */
+  --background-image-primary-gradient: linear-gradient(135deg, var(--color-primary), var(--color-primary-container));
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-primary);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 
+  Editorial Typography Utilities 
+  Grouped under @layer utilities to avoid IDE "Unknown at rule" warnings 
+*/
+@layer utilities {
+  .text-display {
+    font-size: clamp(2.25rem, 5vw, 3.5rem);
+    letter-spacing: -0.02em;
+  }
+
+  .text-headline {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.4;
+  }
+
+  .text-title {
+    font-size: clamp(1rem, 2vw, 1.375rem);
+    font-weight: 500; /* Medium */
+  }
+
+  .text-body-editorial {
+    font-size: clamp(0.75rem, 1.5vw, 1rem);
+    letter-spacing: 0.01em;
+  }
+
+  .text-label-editorial {
+    font-size: clamp(0.6rem, 1vw, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* Structural Components */
+  .glass-surface {
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(24px);
+  }
+
+  .ghost-border {
+    border-bottom: 1px solid rgba(209, 195, 201, 0.15);
+  }
+
+  .ghost-input-border {
+    border-bottom: 1px solid rgba(209, 195, 201, 0.20);
+  }
+
+  .focus-input-border:focus-within {
+    border-bottom: 2px solid var(--color-secondary);
+  }
 }

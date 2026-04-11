@@ -1,0 +1,612 @@
+{
+  "tenants": [
+    {
+      "id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Lumina Beauty Studio",
+      "slug": "lumina",
+      "plan": "pro",
+      "plan_seats": 10,
+      "is_active": true,
+      "created_at": "2025-01-15T09:00:00Z"
+    },
+    {
+      "id": "a1b2c3d4-0001-0001-0001-000000000002",
+      "name": "Aura Wellness Clinic",
+      "slug": "aura",
+      "plan": "starter",
+      "plan_seats": 5,
+      "is_active": true,
+      "created_at": "2025-02-01T10:00:00Z"
+    },
+    {
+      "id": "a1b2c3d4-0001-0001-0001-000000000003",
+      "name": "Bliss Spa & Aesthetics",
+      "slug": "bliss",
+      "plan": "pro",
+      "plan_seats": 8,
+      "is_active": true,
+      "created_at": "2025-03-10T08:00:00Z"
+    }
+  ],
+
+  "branches": [
+    {
+      "id": "b1000000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Lumina — Banjara Hills",
+      "address": "Plot 42, Road No. 12, Banjara Hills, Hyderabad, Telangana 500034",
+      "phone": "+914066889900",
+      "timezone": "Asia/Kolkata",
+      "is_active": true
+    },
+    {
+      "id": "b1000000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Lumina — Jubilee Hills",
+      "address": "8-2-293/82, Road No. 46, Jubilee Hills, Hyderabad, Telangana 500033",
+      "phone": "+914066991122",
+      "timezone": "Asia/Kolkata",
+      "is_active": true
+    },
+    {
+      "id": "b1000000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000002",
+      "name": "Aura Wellness — Madhapur",
+      "address": "1st Floor, Cyber Towers, Madhapur, Hyderabad, Telangana 500081",
+      "phone": "+914023456789",
+      "timezone": "Asia/Kolkata",
+      "is_active": true
+    }
+  ],
+
+  "users": [
+    {
+      "id": "u1000000-0001-0001-0001-000000000001",
+      "tenant_id": null,
+      "branch_id": null,
+      "email": "superadmin@hivecrm.app",
+      "password_hash": "[HASHED]",
+      "role": "super_admin",
+      "first_name": "Rahul",
+      "last_name": "Mehta",
+      "phone": "+919876500001",
+      "is_active": true,
+      "created_at": "2025-01-01T00:00:00Z"
+    },
+    {
+      "id": "u1000000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "email": "priya.sharma@lumina.in",
+      "password_hash": "[HASHED]",
+      "role": "tenant_owner",
+      "first_name": "Priya",
+      "last_name": "Sharma",
+      "phone": "+919876500002",
+      "is_active": true,
+      "created_at": "2025-01-15T09:00:00Z"
+    },
+    {
+      "id": "u1000000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "email": "anita.reddy@lumina.in",
+      "password_hash": "[HASHED]",
+      "role": "branch_manager",
+      "first_name": "Anita",
+      "last_name": "Reddy",
+      "phone": "+919876500003",
+      "is_active": true,
+      "created_at": "2025-01-20T09:00:00Z"
+    },
+    {
+      "id": "u1000000-0001-0001-0001-000000000004",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "email": "reception.banjara@lumina.in",
+      "password_hash": "[HASHED]",
+      "role": "receptionist",
+      "first_name": "Sneha",
+      "last_name": "Kulkarni",
+      "phone": "+919876500004",
+      "is_active": true,
+      "created_at": "2025-01-22T09:00:00Z"
+    },
+    {
+      "id": "u1000000-0001-0001-0001-000000000005",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "email": "kavya.styles@lumina.in",
+      "password_hash": "[HASHED]",
+      "role": "staff",
+      "first_name": "Kavya",
+      "last_name": "Nair",
+      "phone": "+919876500005",
+      "is_active": true,
+      "created_at": "2025-01-25T09:00:00Z"
+    },
+    {
+      "id": "u1000000-0001-0001-0001-000000000006",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "email": "arjun.therapist@lumina.in",
+      "password_hash": "[HASHED]",
+      "role": "staff",
+      "first_name": "Arjun",
+      "last_name": "Pillai",
+      "phone": "+919876500006",
+      "is_active": true,
+      "created_at": "2025-01-25T09:00:00Z"
+    }
+  ],
+
+  "staff_profiles": [
+    {
+      "id": "sp100000-0001-0001-0001-000000000001",
+      "user_id": "u1000000-0001-0001-0001-000000000005",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "bio": "Senior stylist with 8 years experience in hair colouring and cuts.",
+      "commission_rate": 30.00,
+      "color_hex": "#7C3AED"
+    },
+    {
+      "id": "sp100000-0001-0001-0001-000000000002",
+      "user_id": "u1000000-0001-0001-0001-000000000006",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "bio": "Certified spa therapist specialising in deep tissue and hot stone massage.",
+      "commission_rate": 25.00,
+      "color_hex": "#0891B2"
+    },
+    {
+      "id": "sp100000-0001-0001-0001-000000000003",
+      "user_id": "u1000000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "bio": "Branch manager and lead aesthetician.",
+      "commission_rate": 20.00,
+      "color_hex": "#DC2626"
+    }
+  ],
+
+  "staff_availability": [
+    {
+      "id": "sa100000-0001-0001-0001-000000000001",
+      "staff_id": "sp100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 1,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "is_available": true
+    },
+    {
+      "id": "sa100000-0001-0001-0001-000000000002",
+      "staff_id": "sp100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 3,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "is_available": true
+    },
+    {
+      "id": "sa100000-0001-0001-0001-000000000003",
+      "staff_id": "sp100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 5,
+      "start_time": "09:00",
+      "end_time": "18:00",
+      "is_available": true
+    },
+    {
+      "id": "sa100000-0001-0001-0001-000000000004",
+      "staff_id": "sp100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 2,
+      "start_time": "10:00",
+      "end_time": "19:00",
+      "is_available": true
+    },
+    {
+      "id": "sa100000-0001-0001-0001-000000000005",
+      "staff_id": "sp100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 4,
+      "start_time": "10:00",
+      "end_time": "19:00",
+      "is_available": true
+    },
+    {
+      "id": "sa100000-0001-0001-0001-000000000006",
+      "staff_id": "sp100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "day_of_week": 6,
+      "start_time": "10:00",
+      "end_time": "17:00",
+      "is_available": true
+    }
+  ],
+
+  "clients": [
+    {
+      "id": "cl100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "first_name": "Divya",
+      "last_name": "Menon",
+      "email": "divya.menon@gmail.com",
+      "phone": "+919988771001",
+      "dob": "1990-04-15",
+      "gender": "female",
+      "notes": "Prefers morning appointments. Regular client since 2022.",
+      "tags": ["vip", "regular"],
+      "medical_flags": {
+        "allergies": ["nickel", "latex"],
+        "conditions": [],
+        "medications": []
+      },
+      "beauty_notes": {
+        "hair_colour": "Schwarzkopf 7.44 copper blonde",
+        "preferred_stylist": "Kavya Nair",
+        "last_colour_date": "2025-02-10"
+      },
+      "is_active": true,
+      "created_at": "2022-06-01T10:00:00Z"
+    },
+    {
+      "id": "cl100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "first_name": "Rohan",
+      "last_name": "Desai",
+      "email": "rohan.desai@outlook.com",
+      "phone": "+919988771002",
+      "dob": "1985-09-22",
+      "gender": "male",
+      "notes": "Sensitive scalp. Use sulphate-free products only.",
+      "tags": ["regular"],
+      "medical_flags": {
+        "allergies": ["sulphates"],
+        "conditions": ["eczema"],
+        "medications": ["topical steroid cream"]
+      },
+      "beauty_notes": {
+        "preferred_cut": "scissor fade, 2 on sides",
+        "last_visit_service": "Men's haircut and beard trim"
+      },
+      "is_active": true,
+      "created_at": "2023-01-14T11:00:00Z"
+    },
+    {
+      "id": "cl100000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "first_name": "Sunita",
+      "last_name": "Rao",
+      "email": "sunita.rao@yahoo.com",
+      "phone": "+919988771003",
+      "dob": "1978-12-03",
+      "gender": "female",
+      "notes": "Prefers female therapists. Books couples massage with husband every 3 months.",
+      "tags": ["spa", "regular"],
+      "medical_flags": {
+        "allergies": [],
+        "conditions": ["lower back pain"],
+        "medications": []
+      },
+      "beauty_notes": {},
+      "is_active": true,
+      "created_at": "2023-08-20T14:00:00Z"
+    },
+    {
+      "id": "cl100000-0001-0001-0001-000000000004",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "first_name": "Meera",
+      "last_name": "Iyer",
+      "email": "meera.iyer@gmail.com",
+      "phone": "+919988771004",
+      "dob": "1995-07-18",
+      "gender": "female",
+      "notes": "First-time client. Referred by Divya Menon.",
+      "tags": ["new"],
+      "medical_flags": {
+        "allergies": [],
+        "conditions": [],
+        "medications": []
+      },
+      "beauty_notes": {},
+      "is_active": true,
+      "created_at": "2025-03-28T09:30:00Z"
+    }
+  ],
+
+  "service_categories": [
+    {
+      "id": "sc100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Hair",
+      "color_hex": "#7C3AED",
+      "sort_order": 1
+    },
+    {
+      "id": "sc100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Spa & Massage",
+      "color_hex": "#0891B2",
+      "sort_order": 2
+    },
+    {
+      "id": "sc100000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Skin & Aesthetics",
+      "color_hex": "#D97706",
+      "sort_order": 3
+    },
+    {
+      "id": "sc100000-0001-0001-0001-000000000004",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "name": "Nails",
+      "color_hex": "#DB2777",
+      "sort_order": 4
+    }
+  ],
+
+  "services": [
+    {
+      "id": "sv100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "category_id": "sc100000-0001-0001-0001-000000000001",
+      "name": "Women's Haircut & Blowdry",
+      "description": "Cut, style, and blowdry for all hair lengths.",
+      "duration_mins": 60,
+      "buffer_mins": 10,
+      "price": 1200.00,
+      "is_multi_staff": false,
+      "is_active": true
+    },
+    {
+      "id": "sv100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "category_id": "sc100000-0001-0001-0001-000000000001",
+      "name": "Full Hair Colour (Global)",
+      "description": "Single-process global colour with Schwarzkopf or L'Oreal Professional.",
+      "duration_mins": 120,
+      "buffer_mins": 15,
+      "price": 3500.00,
+      "is_multi_staff": false,
+      "is_active": true
+    },
+    {
+      "id": "sv100000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "category_id": "sc100000-0001-0001-0001-000000000002",
+      "name": "Swedish Massage (60 min)",
+      "description": "Full body relaxation massage with aromatherapy oils.",
+      "duration_mins": 60,
+      "buffer_mins": 15,
+      "price": 2200.00,
+      "is_multi_staff": false,
+      "is_active": true
+    },
+    {
+      "id": "sv100000-0001-0001-0001-000000000004",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "category_id": "sc100000-0001-0001-0001-000000000002",
+      "name": "Couples Hot Stone Massage (90 min)",
+      "description": "Synchronised hot stone massage for two guests. Requires two therapists.",
+      "duration_mins": 90,
+      "buffer_mins": 20,
+      "price": 5500.00,
+      "is_multi_staff": true,
+      "is_active": true
+    },
+    {
+      "id": "sv100000-0001-0001-0001-000000000005",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": null,
+      "category_id": "sc100000-0001-0001-0001-000000000003",
+      "name": "Classic Facial (45 min)",
+      "description": "Deep cleanse, exfoliation, steam, extractions, and mask.",
+      "duration_mins": 45,
+      "buffer_mins": 10,
+      "price": 1800.00,
+      "is_multi_staff": false,
+      "is_active": true
+    }
+  ],
+
+  "appointments": [
+    {
+      "id": "ap100000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "client_id": "cl100000-0001-0001-0001-000000000001",
+      "staff_id": "sp100000-0001-0001-0001-000000000001",
+      "service_id": "sv100000-0001-0001-0001-000000000002",
+      "starts_at": "2025-04-10T10:00:00+05:30",
+      "ends_at": "2025-04-10T12:15:00+05:30",
+      "status": "confirmed",
+      "notes": "Client wants copper tones, same as last time.",
+      "cancel_reason": null,
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-05T14:00:00Z"
+    },
+    {
+      "id": "ap100000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "client_id": "cl100000-0001-0001-0001-000000000003",
+      "staff_id": "sp100000-0001-0001-0001-000000000002",
+      "service_id": "sv100000-0001-0001-0001-000000000003",
+      "starts_at": "2025-04-10T11:00:00+05:30",
+      "ends_at": "2025-04-10T12:15:00+05:30",
+      "status": "completed",
+      "notes": "Prefers medium pressure. Lower back focus.",
+      "cancel_reason": null,
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-03T10:00:00Z"
+    },
+    {
+      "id": "ap100000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "client_id": "cl100000-0001-0001-0001-000000000002",
+      "staff_id": "sp100000-0001-0001-0001-000000000001",
+      "service_id": "sv100000-0001-0001-0001-000000000001",
+      "starts_at": "2025-04-11T09:00:00+05:30",
+      "ends_at": "2025-04-11T10:10:00+05:30",
+      "status": "booked",
+      "notes": "Scissor fade, 2 on sides. Sulphate-free products only.",
+      "cancel_reason": null,
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-07T16:30:00Z"
+    },
+    {
+      "id": "ap100000-0001-0001-0001-000000000004",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "client_id": "cl100000-0001-0001-0001-000000000004",
+      "staff_id": "sp100000-0001-0001-0001-000000000003",
+      "service_id": "sv100000-0001-0001-0001-000000000005",
+      "starts_at": "2025-04-12T14:00:00+05:30",
+      "ends_at": "2025-04-12T14:55:00+05:30",
+      "status": "booked",
+      "notes": "First visit. Do patch test before facial.",
+      "cancel_reason": null,
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-08T11:00:00Z"
+    }
+  ],
+
+  "invoices": [
+    {
+      "id": "inv10000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "appointment_id": "ap100000-0001-0001-0001-000000000002",
+      "client_id": "cl100000-0001-0001-0001-000000000003",
+      "invoice_number": "LUM-BH-2025-0041",
+      "subtotal": 2200.00,
+      "discount_amount": 0.00,
+      "tax_amount": 396.00,
+      "tip_amount": 200.00,
+      "total": 2796.00,
+      "status": "paid",
+      "payment_method": "upi",
+      "gateway_ref": "rzp_pay_QX1234ABCD5678",
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-10T12:20:00Z"
+    },
+    {
+      "id": "inv10000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "appointment_id": null,
+      "client_id": "cl100000-0001-0001-0001-000000000001",
+      "invoice_number": "LUM-BH-2025-0039",
+      "subtotal": 850.00,
+      "discount_amount": 85.00,
+      "tax_amount": 138.60,
+      "tip_amount": 0.00,
+      "total": 903.60,
+      "status": "paid",
+      "payment_method": "card",
+      "gateway_ref": "rzp_pay_YZ9876EFGH4321",
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-08T16:45:00Z"
+    },
+    {
+      "id": "inv10000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "branch_id": "b1000000-0001-0001-0001-000000000001",
+      "appointment_id": "ap100000-0001-0001-0001-000000000001",
+      "client_id": "cl100000-0001-0001-0001-000000000001",
+      "invoice_number": "LUM-BH-2025-0042",
+      "subtotal": 3500.00,
+      "discount_amount": 350.00,
+      "tax_amount": 573.30,
+      "tip_amount": 300.00,
+      "total": 4023.30,
+      "status": "draft",
+      "payment_method": null,
+      "gateway_ref": null,
+      "created_by": "u1000000-0001-0001-0001-000000000004",
+      "created_at": "2025-04-10T09:55:00Z"
+    }
+  ],
+
+  "invoice_items": [
+    {
+      "id": "ii100000-0001-0001-0001-000000000001",
+      "invoice_id": "inv10000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "item_type": "service",
+      "name": "Swedish Massage (60 min)",
+      "quantity": 1,
+      "unit_price": 2200.00,
+      "total": 2200.00,
+      "service_id": "sv100000-0001-0001-0001-000000000003",
+      "product_id": null,
+      "staff_id": "sp100000-0001-0001-0001-000000000002"
+    },
+    {
+      "id": "ii100000-0001-0001-0001-000000000002",
+      "invoice_id": "inv10000-0001-0001-0001-000000000001",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "item_type": "tip",
+      "name": "Tip — Arjun Pillai",
+      "quantity": 1,
+      "unit_price": 200.00,
+      "total": 200.00,
+      "service_id": null,
+      "product_id": null,
+      "staff_id": "sp100000-0001-0001-0001-000000000002"
+    },
+    {
+      "id": "ii100000-0001-0001-0001-000000000003",
+      "invoice_id": "inv10000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "item_type": "product",
+      "name": "L'Oreal Serie Expert Vitamino Colour Shampoo 300ml",
+      "quantity": 1,
+      "unit_price": 850.00,
+      "total": 850.00,
+      "service_id": null,
+      "product_id": null,
+      "staff_id": null
+    },
+    {
+      "id": "ii100000-0001-0001-0001-000000000004",
+      "invoice_id": "inv10000-0001-0001-0001-000000000002",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "item_type": "discount",
+      "name": "Loyalty Discount 10%",
+      "quantity": 1,
+      "unit_price": -85.00,
+      "total": -85.00,
+      "service_id": null,
+      "product_id": null,
+      "staff_id": null
+    },
+    {
+      "id": "ii100000-0001-0001-0001-000000000005",
+      "invoice_id": "inv10000-0001-0001-0001-000000000003",
+      "tenant_id": "a1b2c3d4-0001-0001-0001-000000000001",
+      "item_type": "service",
+      "name": "Full Hair Colour (Global)",
+      "quantity": 1,
+      "unit_price": 3500.00,
+      "total": 3500.00,
+      "service_id": "sv100000-0001-0001-0001-000000000002",
+      "product_id": null,
+      "staff_id": "sp100000-0001-0001-0001-000000000001"
+    }
+  ]
+}
