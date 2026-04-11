@@ -562,11 +562,15 @@ Next.js 14 App Router layout. All routes under `(dashboard)` are protected by mi
 │           ├── invoices/route.ts
 │           └── ... (one folder per resource)
 ├── components/
+│   ├── layout/
+│   │   ├── Sidebar.tsx                   -- left navigation
+│   │   └── Topbar.tsx                    -- top header with search
 │   ├── appointments/
 │   │   ├── AppointmentCalendar.tsx
 │   │   ├── AppointmentCard.tsx
 │   │   ├── AppointmentForm.tsx
-│   │   └── AppointmentStatusBadge.tsx
+│   │   ├── AppointmentStatusBadge.tsx
+│   │   └── StaffFilterBar.tsx            -- horizontal staff filters
 │   ├── clients/
 │   │   ├── ClientCard.tsx
 │   │   ├── ClientForm.tsx
@@ -579,7 +583,11 @@ Next.js 14 App Router layout. All routes under `(dashboard)` are protected by mi
 │   │   ├── StaffCard.tsx
 │   │   └── AvailabilityGrid.tsx
 │   └── ui/                               -- shared: Button, Input, Modal, Table, Badge
+│       ├── Button.tsx                    -- generic button with thematic variants
+│       ├── SegmentedControl.tsx          -- tab-style state toggler
+│       └── FloatingActionButton.tsx      -- global bottom right action
 ├── lib/
+│   ├── mockData.ts                       -- temporary api structured mock data
 │   ├── supabase/
 │   │   ├── client.ts
 │   │   ├── server.ts
