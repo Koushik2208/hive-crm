@@ -450,7 +450,7 @@ POST   /api/v1/service-categories         -- manager+
 
 ### Staff
 ```
-GET    /api/v1/staff                      -- all authenticated
+GET    /api/v1/staff                      -- all authenticated (supports role filter)
 POST   /api/v1/staff                      -- manager+
 GET    /api/v1/staff/:id/availability     -- all authenticated
 PUT    /api/v1/staff/:id/availability     -- manager+ or self
@@ -563,8 +563,9 @@ Next.js 14 App Router layout. All routes under `(dashboard)` are protected by mi
 │           └── ... (one folder per resource)
 ├── components/
 │   ├── layout/
-│   │   ├── Sidebar.tsx                   -- left navigation
-│   │   └── Topbar.tsx                    -- top header with search
+│   │   ├── Sidebar.tsx
+│   │   ├── Topbar.tsx
+│   │   └── PageContainer.tsx
 │   ├── appointments/
 │   │   ├── AppointmentCalendar.tsx
 │   │   ├── AppointmentCard.tsx
@@ -604,8 +605,9 @@ Next.js 14 App Router layout. All routes under `(dashboard)` are protected by mi
 │       └── currency.ts
 ├── hooks/
 │   ├── useAppointments.ts
-│   ├── useClients.ts
-│   └── useCalendar.ts
+│   ├── useStaff.ts
+│   ├── useCalendar.ts
+│   └── useClients.ts
 ├── stores/
 │   ├── calendarStore.ts                  -- Zustand
 │   └── posStore.ts
