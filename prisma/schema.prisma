@@ -1,0 +1,371 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model appointments {
+  id                       String                     @id @db.Uuid
+  tenant_id                String?                    @db.Uuid
+  branch_id                String?                    @db.Uuid
+  client_id                String?                    @db.Uuid
+  staff_id                 String?                    @db.Uuid
+  service_id               String?                    @db.Uuid
+  starts_at                DateTime?                  @db.Timestamptz(6)
+  ends_at                  DateTime?                  @db.Timestamptz(6)
+  status                   appointment_status?
+  notes                    String?
+  cancel_reason            String?
+  created_by               String?                    @db.Uuid
+  created_at               DateTime?                  @db.Timestamptz(6)
+  updated_at               DateTime?                  @db.Timestamptz(6)
+  branches                 branches?                  @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  clients                  clients?                   @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                    users?                     @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  services                 services?                  @relation(fields: [service_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  staff_profiles           staff_profiles?            @relation(fields: [staff_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants                  tenants?                   @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consent_form_submissions consent_form_submissions[]
+  invoices                 invoices[]
+  treatment_notes          treatment_notes[]
+
+  @@index([branch_id], map: "idx_appointments_branch")
+  @@index([client_id], map: "idx_appointments_client")
+  @@index([staff_id], map: "idx_appointments_staff")
+  @@index([starts_at], map: "idx_appointments_start")
+  @@index([tenant_id], map: "idx_appointments_tenant")
+}
+
+model branches {
+  id                 String               @id @db.Uuid
+  tenant_id          String?              @db.Uuid
+  name               String?              @db.VarChar(255)
+  address            String?
+  phone              String?              @db.VarChar(20)
+  timezone           String?              @db.VarChar(50)
+  is_active          Boolean?             @default(true)
+  created_at         DateTime?            @db.Timestamptz(6)
+  appointments       appointments[]
+  tenants            tenants?             @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  invoices           invoices[]
+  products           products[]
+  services           services[]
+  staff_availability staff_availability[]
+  staff_profiles     staff_profiles[]
+  users              users[]
+}
+
+model clients {
+  id                       String                     @id @db.Uuid
+  tenant_id                String?                    @db.Uuid
+  first_name               String?                    @db.VarChar(100)
+  last_name                String?                    @db.VarChar(100)
+  email                    String?                    @db.VarChar(255)
+  phone                    String?                    @db.VarChar(20)
+  dob                      DateTime?                  @db.Date
+  gender                   gender_type?
+  notes                    String?
+  tags                     String[]
+  avatar_url               String?
+  medical_flags            Json?
+  beauty_notes             Json?
+  is_active                Boolean?                   @default(true)
+  created_at               DateTime?                  @db.Timestamptz(6)
+  appointments             appointments[]
+  tenants                  tenants?                   @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consent_form_submissions consent_form_submissions[]
+  invoices                 invoices[]
+  treatment_notes          treatment_notes[]
+
+  @@index([tenant_id], map: "idx_clients_tenant")
+}
+
+model consent_form_submissions {
+  id                     String                  @id @db.Uuid
+  tenant_id              String?                 @db.Uuid
+  template_id            String?                 @db.Uuid
+  client_id              String?                 @db.Uuid
+  appointment_id         String?                 @db.Uuid
+  form_data              Json?
+  signature_url          String?
+  submitted_at           DateTime?               @db.Timestamptz(6)
+  appointments           appointments?           @relation(fields: [appointment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  clients                clients?                @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  consent_form_templates consent_form_templates? @relation(fields: [template_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants                tenants?                @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model consent_form_templates {
+  id                       String                     @id @db.Uuid
+  tenant_id                String?                    @db.Uuid
+  name                     String?                    @db.VarChar(255)
+  content                  Json?
+  service_ids              String[]                   @db.Uuid
+  is_active                Boolean?                   @default(true)
+  created_at               DateTime?                  @db.Timestamptz(6)
+  consent_form_submissions consent_form_submissions[]
+  tenants                  tenants?                   @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model invoice_items {
+  id             String             @id @db.Uuid
+  invoice_id     String?            @db.Uuid
+  tenant_id      String?            @db.Uuid
+  item_type      invoice_item_type?
+  name           String?            @db.VarChar(255)
+  quantity       Decimal?           @db.Decimal(10, 3)
+  unit_price     Decimal?           @db.Decimal(10, 2)
+  total          Decimal?           @db.Decimal(10, 2)
+  service_id     String?            @db.Uuid
+  product_id     String?            @db.Uuid
+  staff_id       String?            @db.Uuid
+  invoices       invoices?          @relation(fields: [invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  products       products?          @relation(fields: [product_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  services       services?          @relation(fields: [service_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  staff_profiles staff_profiles?    @relation(fields: [staff_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants        tenants?           @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model invoices {
+  id              String               @id @db.Uuid
+  tenant_id       String?              @db.Uuid
+  branch_id       String?              @db.Uuid
+  appointment_id  String?              @db.Uuid
+  client_id       String?              @db.Uuid
+  invoice_number  String?              @db.VarChar(50)
+  subtotal        Decimal?             @db.Decimal(10, 2)
+  discount_amount Decimal?             @default(0) @db.Decimal(10, 2)
+  tax_amount      Decimal?             @default(0) @db.Decimal(10, 2)
+  tip_amount      Decimal?             @default(0) @db.Decimal(10, 2)
+  total           Decimal?             @db.Decimal(10, 2)
+  status          invoice_status?
+  payment_method  payment_method_type?
+  gateway_ref     String?              @db.VarChar(255)
+  created_by      String?              @db.Uuid
+  created_at      DateTime?            @db.Timestamptz(6)
+  invoice_items   invoice_items[]
+  appointments    appointments?        @relation(fields: [appointment_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  branches        branches?            @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  clients         clients?             @relation(fields: [client_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users           users?               @relation(fields: [created_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants         tenants?             @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([client_id], map: "idx_invoices_client")
+  @@index([tenant_id], map: "idx_invoices_tenant")
+}
+
+model products {
+  id              String          @id @db.Uuid
+  tenant_id       String?         @db.Uuid
+  branch_id       String?         @db.Uuid
+  name            String?         @db.VarChar(255)
+  sku             String?         @db.VarChar(100)
+  category        String?         @db.VarChar(100)
+  product_type    product_type?
+  unit            String?         @db.VarChar(50)
+  price           Decimal?        @db.Decimal(10, 2)
+  cost            Decimal?        @db.Decimal(10, 2)
+  stock_qty       Decimal?        @db.Decimal(10, 3)
+  low_stock_alert Decimal?        @db.Decimal(10, 3)
+  is_active       Boolean?        @default(true)
+  invoice_items   invoice_items[]
+  branches        branches?       @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants         tenants?        @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model service_categories {
+  id         String     @id @db.Uuid
+  tenant_id  String?    @db.Uuid
+  name       String?    @db.VarChar(100)
+  color_hex  String?    @db.VarChar(7)
+  sort_order Int?
+  tenants    tenants?   @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  services   services[]
+}
+
+model services {
+  id                 String              @id @db.Uuid
+  tenant_id          String?             @db.Uuid
+  branch_id          String?             @db.Uuid
+  category_id        String?             @db.Uuid
+  name               String?             @db.VarChar(255)
+  description        String?
+  duration_mins      Int?
+  buffer_mins        Int?                @default(0)
+  price              Decimal?            @db.Decimal(10, 2)
+  is_multi_staff     Boolean?            @default(false)
+  is_active          Boolean?            @default(true)
+  appointments       appointments[]
+  invoice_items      invoice_items[]
+  branches           branches?           @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  service_categories service_categories? @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants            tenants?            @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([category_id], map: "idx_services_category")
+  @@index([tenant_id], map: "idx_services_tenant")
+}
+
+model staff_availability {
+  id             String          @id @db.Uuid
+  staff_id       String?         @db.Uuid
+  tenant_id      String?         @db.Uuid
+  branch_id      String?         @db.Uuid
+  day_of_week    Int?
+  start_time     DateTime?       @db.Time(6)
+  end_time       DateTime?       @db.Time(6)
+  is_available   Boolean?        @default(true)
+  branches       branches?       @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  staff_profiles staff_profiles? @relation(fields: [staff_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants        tenants?        @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model staff_profiles {
+  id                 String               @id @db.Uuid
+  user_id            String?              @db.Uuid
+  tenant_id          String?              @db.Uuid
+  branch_id          String?              @db.Uuid
+  bio                String?
+  commission_rate    Decimal?             @db.Decimal(5, 2)
+  color_hex          String?              @db.VarChar(7)
+  created_at         DateTime?            @db.Timestamptz(6)
+  appointments       appointments[]
+  invoice_items      invoice_items[]
+  staff_availability staff_availability[]
+  branches           branches?            @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants            tenants?             @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users              users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  treatment_notes    treatment_notes[]
+
+  @@index([tenant_id], map: "idx_staff_profiles_tenant")
+}
+
+model tenants {
+  id                       String                     @id @db.Uuid
+  name                     String?                    @db.VarChar(255)
+  slug                     String?                    @unique @db.VarChar(100)
+  plan                     plan_type?
+  plan_seats               Int?
+  is_active                Boolean?                   @default(true)
+  created_at               DateTime?                  @db.Timestamptz(6)
+  updated_at               DateTime?                  @db.Timestamptz(6)
+  appointments             appointments[]
+  branches                 branches[]
+  clients                  clients[]
+  consent_form_submissions consent_form_submissions[]
+  consent_form_templates   consent_form_templates[]
+  invoice_items            invoice_items[]
+  invoices                 invoices[]
+  products                 products[]
+  service_categories       service_categories[]
+  services                 services[]
+  staff_availability       staff_availability[]
+  staff_profiles           staff_profiles[]
+  treatment_notes          treatment_notes[]
+  users                    users[]
+}
+
+model treatment_notes {
+  id             String         @id @db.Uuid
+  tenant_id      String         @db.Uuid
+  appointment_id String         @db.Uuid
+  client_id      String         @db.Uuid
+  staff_id       String         @db.Uuid
+  subjective     String?
+  objective      String?
+  assessment     String?
+  plan           String?
+  images         String[]
+  created_at     DateTime?      @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime?      @default(now()) @db.Timestamptz(6)
+  appointments   appointments   @relation(fields: [appointment_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  clients        clients        @relation(fields: [client_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  staff_profiles staff_profiles @relation(fields: [staff_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  tenants        tenants        @relation(fields: [tenant_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@index([appointment_id], map: "idx_treatment_notes_appointment")
+  @@index([client_id], map: "idx_treatment_notes_client")
+  @@index([tenant_id], map: "idx_treatment_notes_tenant")
+}
+
+model users {
+  id             String           @id @db.Uuid
+  tenant_id      String?          @db.Uuid
+  branch_id      String?          @db.Uuid
+  email          String?          @unique @db.VarChar(255)
+  password_hash  String?
+  role           user_role?
+  first_name     String?          @db.VarChar(100)
+  last_name      String?          @db.VarChar(100)
+  phone          String?          @db.VarChar(20)
+  avatar_url     String?
+  is_active      Boolean?         @default(true)
+  created_at     DateTime?        @db.Timestamptz(6)
+  appointments   appointments[]
+  invoices       invoices[]
+  staff_profiles staff_profiles[]
+  branches       branches?        @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  tenants        tenants?         @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+enum appointment_status {
+  booked
+  confirmed
+  in_progress
+  completed
+  cancelled
+  no_show
+}
+
+enum gender_type {
+  male
+  female
+  other
+  prefer_not_to_say
+}
+
+enum invoice_item_type {
+  service
+  product
+  tip
+  discount
+}
+
+enum invoice_status {
+  draft
+  paid
+  refunded
+  void
+}
+
+enum payment_method_type {
+  cash
+  card
+  upi
+  split
+}
+
+enum plan_type {
+  trial
+  starter
+  pro
+  enterprise
+}
+
+enum product_type {
+  retail
+  backbar
+  consumable
+}
+
+enum user_role {
+  super_admin
+  tenant_owner
+  branch_manager
+  receptionist
+  staff
+  client
+}
