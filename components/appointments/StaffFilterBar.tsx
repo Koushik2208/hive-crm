@@ -9,25 +9,24 @@ interface StaffFilterBarProps {
   disableAllTeam?: boolean; // Used for week/month view where "All Team" makes no sense
 }
 
-export default function StaffFilterBar({ 
-  staffList, 
-  activeStaffId = null, 
+export default function StaffFilterBar({
+  staffList,
+  activeStaffId = null,
   onStaffSelect,
-  disableAllTeam = false 
+  disableAllTeam = false
 }: StaffFilterBarProps) {
   return (
     <div className="flex items-center gap-4 overflow-x-auto pb-2 scrollbar-hide">
       <span className="text-xs font-bold text-outline tracking-widest uppercase shrink-0">
         Filter Staff
       </span>
-      <div className="flex gap-3">
+      <div className="flex gap-3 py-2">
         {/* All Team Button */}
         {!disableAllTeam && (
-          <button 
+          <button
             onClick={() => onStaffSelect?.(null)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md transition-all shrink-0 ${
-              activeStaffId === null ? 'bg-secondary text-white' : 'bg-white text-secondary border border-outline-variant hover:bg-surface-container'
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md transition-all shrink-0 ${activeStaffId === null ? 'bg-secondary text-white' : 'bg-white text-secondary border border-outline-variant hover:bg-surface-container'
+              }`}
           >
             <span className="text-sm font-medium">All Team</span>
           </button>
@@ -40,11 +39,10 @@ export default function StaffFilterBar({
             <button
               key={staff.id}
               onClick={() => onStaffSelect?.(staff.id)}
-              className={`group flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all shrink-0 ${
-                isActive 
-                  ? 'border-secondary bg-secondary/5 ring-1 ring-secondary' 
+              className={`group flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all shrink-0 ${isActive
+                  ? 'border-secondary bg-secondary/5 ring-1 ring-secondary'
                   : 'border-outline-variant hover:bg-white bg-transparent'
-              }`}
+                }`}
             >
               <div className="h-6 w-6 overflow-hidden rounded-full border border-white">
                 {staff.users?.avatar_url ? (

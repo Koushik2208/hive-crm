@@ -54,9 +54,7 @@ export default function StaffPage() {
                     role={filters.role}
                     status={filters.status}
                     branch={filters.branch}
-                    viewMode={viewMode}
                     onFilterChange={handleFilterChange}
-                    onViewModeChange={setViewMode}
                 />
             </section>
 
@@ -75,8 +73,8 @@ export default function StaffPage() {
                     </div>
                 ) : (
                     <div className={`grid gap-6 ${viewMode === 'grid'
-                            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-                            : 'grid-cols-1'
+                        ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                        : 'grid-cols-1'
                         }`}>
                         {staffList.map((staff) => (
                             <StaffCard key={staff.id} staff={staff} />

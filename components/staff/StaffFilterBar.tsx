@@ -5,18 +5,14 @@ interface StaffFilterBarProps {
   role: string;
   status: string;
   branch: string;
-  viewMode: 'grid' | 'list';
   onFilterChange: (key: string, value: string) => void;
-  onViewModeChange: (mode: 'grid' | 'list') => void;
 }
 
 export default function StaffFilterBar({
   role,
   status,
   branch,
-  viewMode,
   onFilterChange,
-  onViewModeChange
 }: StaffFilterBarProps) {
 
   return (
@@ -40,22 +36,13 @@ export default function StaffFilterBar({
         onSelect={(val: string) => onFilterChange('branch', val)}
       />
 
-
       <div className="ml-auto flex items-center gap-2 pr-2">
-        <button
-          onClick={() => onViewModeChange('grid')}
-          className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'text-secondary bg-secondary/5' : 'text-on-surface-variant/40 hover:bg-surface-container-high'
-            }`}
-        >
-          <LayoutGrid size={20} />
-        </button>
-        <button
-          onClick={() => onViewModeChange('list')}
-          className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'text-secondary bg-secondary/5' : 'text-on-surface-variant/40 hover:bg-surface-container-high'
-            }`}
-        >
-          <List size={20} />
-        </button>
+        <FilterDropdown
+          label="Sort By"
+          value="Name (A-Z)"
+          options={['Name (A-Z)', 'Last Action', 'Performance']}
+          onSelect={() => { }}
+        />
       </div>
     </div>
   );

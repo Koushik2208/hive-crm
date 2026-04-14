@@ -34,17 +34,16 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ease-out duration-250 ${
-                isActive
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all ease-out duration-250 ${isActive
                   ? 'bg-surface-container-lowest text-primary shadow-[0px_12px_32px_rgba(78,68,73,0.04)] font-semibold'
                   : 'text-secondary hover:glass-surface'
-              }`}
+                }`}
             >
               {/* Force fill on calendar specifically to maintain the mock aesthetic when active */}
-              <Icon 
-                size={20} 
-                fill={isActive && item.name === 'Calendar' ? "currentColor" : "none"} 
-                className={isActive ? "text-primary" : ""} 
+              <Icon
+                size={20}
+                fill={isActive && item.name === 'Calendar' ? "currentColor" : "none"}
+                className={isActive ? "text-primary" : ""}
               />
               <span className="font-sans text-sm tracking-[0.01em]">{item.name}</span>
             </Link>
