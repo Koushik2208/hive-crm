@@ -10,8 +10,9 @@ export type Client = clients;
 export interface ClientsApiResponse {
   data: Client[];
   meta: {
-    count: number;
+    total: number;
+    page: number;
     limit: number;
-    offset: number;
+    pages: number;
   };
 }

@@ -24,8 +24,9 @@ export async function GET(request: NextRequest) {
     const isActiveParam = searchParams.get("is_active");
     const roleParam = searchParams.get("role");
     const includeSchedule = searchParams.get("include_schedule") === "true";
-    const limit = Math.min(Number(searchParams.get("limit") ?? 100), 200);
-    const offset = Number(searchParams.get("offset") ?? 0);
+    const page = Math.max(Number(searchParams.get("page") ?? 1), 1);
+    const limit = Math.min(Math.max(Number(searchParams.get("limit") ?? 10), 1), 100);
+    const skip = (page - 1) * limit;
 
     // Resolve is_active filter — only apply when explicitly provided
     const isActive =
@@ -37,67 +38,73 @@ export async function GET(request: NextRequest) {
 
     const tenantId = await getCurrentTenantId();
 
-    const staffList = await prisma.staff_profiles.findMany({
-      where: {
-        tenant_id: tenantId,
-        ...(branchId && { branch_id: branchId }),
-        // Filter via the related users row
-        ...((isActive !== undefined || roleParam) && {
-          users: { 
-            ...(isActive !== undefined && { is_active: isActive }),
-            ...(roleParam && { role: roleParam as any }),
-          },
-        }),
-      },
-      select: {
-        id: true,
-        bio: true,
-        color_hex: true,
-        commission_rate: true,
-        branch_id: true,
-        created_at: true,
-        // Flatten the user details alongside the profile
-        users: {
-          select: {
-            id: true,
-            first_name: true,
-            last_name: true,
-            email: true,
-            phone: true,
-            role: true,
-            avatar_url: true,
-            is_active: true,
-          },
+    const whereClause = {
+      tenant_id: tenantId,
+      ...(branchId && { branch_id: branchId }),
+      // Filter via the related users row
+      ...((isActive !== undefined || roleParam) && {
+        users: { 
+          ...(isActive !== undefined && { is_active: isActive }),
+          ...(roleParam && { role: roleParam as any }),
         },
-        // Only include the weekly schedule when explicitly requested
-        // (avoids inflating the response for simple staff-picker dropdowns)
-        ...(includeSchedule && {
-          staff_availability: {
+      }),
+    };
+
+    const [staffList, total] = await Promise.all([
+      prisma.staff_profiles.findMany({
+        where: whereClause,
+        select: {
+          id: true,
+          bio: true,
+          color_hex: true,
+          commission_rate: true,
+          branch_id: true,
+          created_at: true,
+          // Flatten the user details alongside the profile
+          users: {
             select: {
               id: true,
-              day_of_week: true,
-              start_time: true,
-              end_time: true,
-              is_available: true,
+              first_name: true,
+              last_name: true,
+              email: true,
+              phone: true,
+              role: true,
+              avatar_url: true,
+              is_active: true,
             },
-            orderBy: { day_of_week: "asc" },
           },
-        }),
-      },
-      orderBy: {
-        // Sort alphabetically by the linked user's first name
-        users: { first_name: "asc" },
-      },
-      take: limit,
-      skip: offset,
-    });
+          // Only include the weekly schedule when explicitly requested
+          // (avoids inflating the response for simple staff-picker dropdowns)
+          ...(includeSchedule && {
+            staff_availability: {
+              select: {
+                id: true,
+                day_of_week: true,
+                start_time: true,
+                end_time: true,
+                is_available: true,
+              },
+              orderBy: { day_of_week: "asc" },
+            },
+          }),
+        },
+        orderBy: {
+          // Sort alphabetically by the linked user's first name
+          users: { first_name: "asc" },
+        },
+        take: limit,
+        skip: skip,
+      }),
+      prisma.staff_profiles.count({ where: whereClause })
+    ]);
 
     return Response.json({
       data: staffList,
       meta: {
-        count: staffList.length,
+        total,
+        page,
         limit,
-        offset,
+        pages: Math.ceil(total / limit),
       },
     });
   } catch (error) {

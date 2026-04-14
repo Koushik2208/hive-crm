@@ -13,13 +13,6 @@ export default function StaffCard({ staff }: StaffCardProps) {
 
     return (
         <div className="bg-surface-container-lowest rounded-3xl p-6 ambient-shadow border border-outline-variant/5 group hover:bg-surface-bright transition-all duration-300 flex flex-col relative overflow-hidden">
-            {/* Top Action Menu */}
-            <div className="absolute top-0 right-0 p-4">
-                <button className="p-1.5 text-on-surface-variant/40 hover:text-primary transition-colors">
-                    <MoreVertical size={20} />
-                </button>
-            </div>
-
             {/* Profile Header */}
             <div className="flex flex-col items-center text-center mb-6">
                 <div className="w-24 h-24 rounded-full overflow-hidden mb-4 ring-4 ring-surface-container-low group-hover:ring-tertiary-fixed transition-all duration-500 shadow-inner">

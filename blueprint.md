@@ -429,13 +429,11 @@ DELETE /api/v1/users/:id                  -- tenant_owner
 
 ### Clients
 ```
-GET    /api/v1/clients                    -- staff+
-POST   /api/v1/clients                    -- staff+
+GET    /api/v1/clients                    -- staff+ (supports search, tag, status filters)
+POST   /api/v1/clients                    -- staff+ (with duplicate email/phone detection)
 GET    /api/v1/clients/:id                -- staff+
-PATCH  /api/v1/clients/:id                -- staff+
+PATCH  /api/v1/clients/:id                -- staff+ (with duplicate email/phone detection)
 DELETE /api/v1/clients/:id                -- manager+
-GET    /api/v1/clients/:id/appointments   -- staff+
-GET    /api/v1/clients/:id/invoices       -- receptionist+
 ```
 
 ### Services
@@ -575,6 +573,8 @@ Next.js 14 App Router layout. All routes under `(dashboard)` are protected by mi
 │   ├── clients/
 │   │   ├── ClientCard.tsx
 │   │   ├── ClientForm.tsx
+│   │   ├── ClientsHeader.tsx
+│   │   ├── ClientFilters.tsx
 │   │   └── ClientProfileTabs.tsx
 │   ├── billing/
 │   │   ├── InvoiceForm.tsx
@@ -773,7 +773,7 @@ SUPABASE_STORAGE_BUCKET_IMAGES=treatment-images
 - [ ] Test login flow with seeded super_admin and tenant_owner accounts
 
 ### Phase 1 Module Order (build in this sequence)
-- [ ] **M1 — Clients:** CRUD, search, profile page (simplest, no dependencies)
+- [x] **M1 — Clients:** CRUD, search, profile page (completed with API integration)
 - [ ] **M4 — Staff:** Profiles, availability grid
 - [ ] **M3 — Services:** Categories, service list, per-branch pricing
 - [ ] **M1 — Appointments:** Availability checker, calendar, booking form, status flow
