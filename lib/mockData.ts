@@ -72,7 +72,17 @@ export const appointmentsData: Appointment[] = [
     starts_at: getTodayAtTime(9, 30),
     ends_at: getTodayAtTime(10, 30),
     status: "confirmed",
-    client: { id: "c_1", first_name: "Sophie", last_name: "Laurent" },
+    client: { 
+      id: "c_1", 
+      first_name: "Sophie", 
+      last_name: "Laurent",
+      email: "sophie@example.com",
+      phone: "+1 234 567 890",
+      tags: ["VIP"],
+      last_visit: "2024-03-20",
+      notes: "Likes cold water",
+      status: "active"
+    },
     service: { id: "srv_1", name: "Full Body Massage", duration_mins: 60 },
     staff: staffList[2], // Elena V.
   },
@@ -81,7 +91,17 @@ export const appointmentsData: Appointment[] = [
     starts_at: getTodayAtTime(11, 0),
     ends_at: getTodayAtTime(12, 30),
     status: "in_progress",
-    client: { id: "c_2", first_name: "Julianne", last_name: "Moretti" },
+    client: { 
+      id: "c_2", 
+      first_name: "Julianne", 
+      last_name: "Moretti",
+      email: "julianne@example.com",
+      phone: "+1 234 567 891",
+      tags: ["Regular"],
+      last_visit: "2024-03-21",
+      notes: "Sensitive skin",
+      status: "active"
+    },
     service: { id: "srv_2", name: "Hydrafacial Deluxe", duration_mins: 90 },
     staff: staffList[0], // Sarah T.
   },
@@ -89,8 +109,18 @@ export const appointmentsData: Appointment[] = [
     id: "apt_3",
     starts_at: getTodayAtTime(14, 15),
     ends_at: getTodayAtTime(15, 0),
-    status: "booked", // We map "arriving" to a core booked status per schema limits
-    client: { id: "c_3", first_name: "Arthur", last_name: "P." },
+    status: "booked",
+    client: { 
+      id: "c_3", 
+      first_name: "Arthur", 
+      last_name: "P.",
+      email: "arthur@example.com",
+      phone: "+1 234 567 892",
+      tags: ["New"],
+      last_visit: "2024-03-22",
+      notes: "First time",
+      status: "active"
+    },
     service: { id: "srv_3", name: "Grooming & Trim", duration_mins: 45 },
     staff: staffList[1], // Marcus L.
   },
@@ -99,7 +129,17 @@ export const appointmentsData: Appointment[] = [
     starts_at: getTodayAtTime(16, 0),
     ends_at: getTodayAtTime(17, 30),
     status: "confirmed",
-    client: { id: "c_4", first_name: "Isabella", last_name: "Chen" },
+    client: { 
+      id: "c_4", 
+      first_name: "Isabella", 
+      last_name: "Chen",
+      email: "isabella@example.com",
+      phone: "+1 234 567 893",
+      tags: ["Regular"],
+      last_visit: "2024-03-23",
+      notes: "Prefers silent service",
+      status: "active"
+    },
     service: { id: "srv_4", name: "Aromatherapy Session", duration_mins: 90 },
     staff: staffList[2], // Elena V.
   },
@@ -108,7 +148,17 @@ export const appointmentsData: Appointment[] = [
     starts_at: getTodayAtTime(12, 30),
     ends_at: getTodayAtTime(14, 0),
     status: "confirmed",
-    client: { id: "c_5", first_name: "Aman & Aisha", last_name: "Khan" },
+    client: { 
+      id: "c_5", 
+      first_name: "Aman & Aisha", 
+      last_name: "Khan",
+      email: "khan@example.com",
+      phone: "+1 234 567 894",
+      tags: ["VIP"],
+      last_visit: "2024-03-24",
+      notes: "Anniversary special",
+      status: "active"
+    },
     service: { id: "srv_5", name: "Couples Hot Stone Massage", duration_mins: 90 },
     staff: staffList[0], // Sarah T.
   },
@@ -117,7 +167,17 @@ export const appointmentsData: Appointment[] = [
     starts_at: getTodayAtTime(12, 30),
     ends_at: getTodayAtTime(14, 0),
     status: "confirmed",
-    client: { id: "c_5", first_name: "Aman & Aisha", last_name: "Khan" },
+    client: { 
+      id: "c_5", 
+      first_name: "Aman & Aisha", 
+      last_name: "Khan",
+      email: "khan@example.com",
+      phone: "+1 234 567 894",
+      tags: ["VIP"],
+      last_visit: "2024-03-24",
+      notes: "Anniversary special",
+      status: "active"
+    },
     service: { id: "srv_5", name: "Couples Hot Stone Massage", duration_mins: 90 },
     staff: staffList[1], // Marcus L.
   },
