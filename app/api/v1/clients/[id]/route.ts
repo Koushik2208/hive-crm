@@ -10,10 +10,10 @@ import { ClientUpdateSchema } from "@/lib/validations/client.schema";
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const body = await request.json();
     const validated = ClientUpdateSchema.parse(body);
     const tenantId = await getCurrentTenantId();
@@ -69,7 +69,8 @@ export async function PATCH(
 
     return Response.json({ data: updatedClient });
   } catch (error: any) {
-    console.error(`[PATCH /api/v1/clients/${params.id}]`, error);
+    const { id } = await params;
+    console.error(`[PATCH /api/v1/clients/${id}]`, error);
     if (error.name === "ZodError") {
       return Response.json({ error: "Validation failed", details: error.errors }, { status: 400 });
     }
@@ -84,10 +85,10 @@ export async function PATCH(
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
     const tenantId = await getCurrentTenantId();
 
     const client = await prisma.clients.findFirst({
@@ -100,7 +101,8 @@ export async function GET(
 
     return Response.json({ data: client });
   } catch (error) {
-    console.error(`[GET /api/v1/clients/${params.id}]`, error);
+    const { id } = await params;
+    console.error(`[GET /api/v1/clients/${id}]`, error);
     return Response.json({ error: "Failed to fetch client" }, { status: 500 });
   }
 }
