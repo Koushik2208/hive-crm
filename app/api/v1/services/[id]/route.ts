@@ -71,8 +71,8 @@ export async function PATCH(
         price: validated.price,
         is_multi_staff: validated.is_multi_staff,
         is_active: validated.is_active,
-        category_id: validated.category_id,
-        branch_id: validated.branch_id,
+        category_id: validated.categoryId,
+        branch_id: validated.branchId,
       },
       include: {
         service_categories: true,

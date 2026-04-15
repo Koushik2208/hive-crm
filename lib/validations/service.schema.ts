@@ -15,11 +15,13 @@ export type ServiceCategoryCreateInput = z.infer<typeof ServiceCategoryCreateSch
 export const ServiceCreateSchema = z.object({
   name: z.string().min(1, "Service name is required").max(255),
   description: z.string().optional().nullable(),
-  category_id: z.string().uuid("Invalid category ID").optional().nullable(),
-  branch_id: z.string().uuid("Invalid branch ID").optional().nullable(),
-  duration_mins: z.number().int().positive("Duration must be positive"),
-  buffer_mins: z.number().int().nonnegative().default(0),
-  price: z.number().positive("Price must be positive"),
+  // Standardized to camelCase to match project-wide form patterns
+  // .optional().nullable() MUST be outside the preprocess to make the PROPERTY optional in the object
+  categoryId: z.preprocess((val) => (val === "" ? null : val), z.string()).optional().nullable(),
+  branchId: z.preprocess((val) => (val === "" ? null : val), z.string()).optional().nullable(),
+  duration_mins: z.coerce.number().int().positive("Duration must be positive"),
+  buffer_mins: z.coerce.number().int().nonnegative().default(0),
+  price: z.coerce.number().positive("Price must be positive"),
   is_multi_staff: z.boolean().default(false),
   is_active: z.boolean().default(true),
 });
@@ -31,5 +33,8 @@ export type ServiceCreateOutput = z.infer<typeof ServiceCreateSchema>;
 export type ServiceUpdateOutput = z.infer<typeof ServiceUpdateSchema>;
 
 // Input Types (Pre-transform) - used for useForm
-export type ServiceCreateInput = z.input<typeof ServiceCreateSchema>;
+export type ServiceFormValues = z.input<typeof ServiceCreateSchema>;
 export type ServiceUpdateInput = z.input<typeof ServiceUpdateSchema>;
+
+// Backward compatibility or for generic use
+export type ServiceCreateInput = ServiceFormValues;

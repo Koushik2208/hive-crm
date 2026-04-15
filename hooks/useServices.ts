@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Service, ServicesApiResponse, ServiceCategoriesApiResponse } from '@/types/services';
-import { ServiceUpdateInput } from '@/lib/validations/service.schema';
+import { ServiceUpdateInput, ServiceCreateInput } from '@/lib/validations/service.schema';
 
 interface UseServicesOptions {
   page?: number;
@@ -133,6 +133,43 @@ export function useDeleteCategory() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['service-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['services'] });
+    },
+  });
+}
+
+export function useService(id: string) {
+  return useQuery({
+    queryKey: ['services', id],
+    queryFn: async () => {
+      const response = await fetch(`/api/v1/services/${id}`);
+      if (!response.ok) throw new Error('Failed to fetch service');
+      const result = await response.json();
+      return result.data as Service;
+    },
+    enabled: !!id,
+  });
+}
+
+export function useCreateService() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: ServiceCreateInput) => {
+      const response = await fetch('/api/v1/services', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to create service');
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['services'] });
     },
   });

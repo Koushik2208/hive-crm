@@ -53,7 +53,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
       <div className="flex items-center gap-12">
         <div className="text-right">
           <span className="text-2xl font-light text-primary leading-none">
-            ${Number(service.price).toFixed(2)}
+            ₹{Number(service.price).toFixed(2)}
           </span>
           <p className="text-[10px] text-outline uppercase tracking-widest mt-1.5 font-bold">
             {service.is_multi_staff ? 'Starting From' : 'Base Price'}
@@ -65,7 +65,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
           <button 
             onClick={handleToggle}
             className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-primary/20 ${
-              service.is_active ? "bg-primary" : "bg-surface-container-high"
+              service.is_active ? "bg-primary" : "bg-outline-variant/30"
             }`}
           >
             <span

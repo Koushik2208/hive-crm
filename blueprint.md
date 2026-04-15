@@ -793,3 +793,30 @@ SUPABASE_STORAGE_BUCKET_IMAGES=treatment-images
 ---
 
 *End of Blueprint — Phase 5: Seed Data follows below.*
+
+---
+
+## 13. Lessons Learned & Best Practices (The Blueprint)
+
+This section documents repeated patterns and architectural decisions to ensure consistency and avoid common regressions.
+
+### 13.1 Form Architecture
+- **FormProvider Over Prop-Drilling**: For all non-trivial forms, utilize the `FormProvider` pattern. This allows specialized sub-sections (e.g., `ClientBasicInfo`, `ServicePricing`) to access form context via `useFormContext` without complex prop-drilling.
+- **Form Standardization**: Always use the modular `FormInput`, `FormSelect`, and `FormTextArea` components from `components/ui/` to ensure consistent error handling, typography, and styling.
+
+### 13.2 Data Integrity & Validation
+- **Relation ID Handling**: Database relations (UUIDs like `branch_id` or `category_id`) must be initialized as `null` (not `""`) when unassigned. 
+- **Zod Robustness**: Update schemas to handle potential empty strings (`""`) from UI "Select" fields by using `z.preprocess`. This ensures the value is converted to `null` **before** any validation rules like `.uuid()` or `.min()` run.
+    - *Pattern*: `z.preprocess((val) => (val === "" ? null : val), z.string().uuid().optional().nullable())`
+- **Type Coercion**: Ensure numeric form fields (Price, Duration) are coerced using `Number()` or `valueAsNumber` during initialization and submission to avoid type mismatches with Prisma.
+
+### 13.3 UI Component Standards
+- **Prop Naming**: Always use the standard HTML `placeholder` attribute for inputs. Avoid non-standard variants like `placeholderText`.
+- **Page Layout**: Every dashboard sub-page must be wrapped in a `PageContainer` component. This ensures the standard "Aura Velvet" padding, max-width, and vertical rhythm are maintained.
+- **Header Uniformity**: Form headers must follow the `ClientForm` template: 
+    - `ArrowLeft` icon for back navigation.
+    - `text-2xl font-bold` for the title.
+    - Single high-impact `Button` on the right for the primary CTA (Save/Update).
+
+### 13.4 Logic Splitting
+- Maintain the practice of splitting complex forms into domain-specific sub-components (e.g., `form/ServiceBasicInfo.tsx`). This localized logic is easier to test and maintain than monolithic form files.
