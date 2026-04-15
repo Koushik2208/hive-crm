@@ -1,6 +1,7 @@
 import React from 'react';
 import { Plus } from 'lucide-react';
 import { StaffProfileWithDetails } from '@/types';
+import { FilterPill } from '@/components/ui/FilterPill';
 
 interface StaffFilterBarProps {
   staffList: StaffProfileWithDetails[];
@@ -20,53 +21,53 @@ export default function StaffFilterBar({
       <span className="text-xs font-bold text-outline tracking-widest uppercase shrink-0">
         Filter Staff
       </span>
-      <div className="flex gap-3 py-2">
+      <div className="flex gap-3 py-2 items-center">
         {/* All Team Button */}
         {!disableAllTeam && (
-          <button
+          <FilterPill
+            label="All Team"
+            isActive={activeStaffId === null}
             onClick={() => onStaffSelect?.(null)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full shadow-md transition-all shrink-0 ${activeStaffId === null ? 'bg-secondary text-white' : 'bg-white text-secondary border border-outline-variant hover:bg-surface-container'
-              }`}
-          >
-            <span className="text-sm font-medium">All Team</span>
-          </button>
+            className="shrink-0"
+          />
         )}
 
         {/* Individual Staff Buttons */}
         {staffList.map((staff) => {
           const isActive = activeStaffId === staff.id;
+          
+          // Prepare the icon (avatar or color dot)
+          const icon = (
+            <div className="h-6 w-6 overflow-hidden rounded-full border border-white/20">
+              {staff.users?.avatar_url ? (
+                <img
+                  src={staff.users.avatar_url}
+                  alt={staff.users.first_name || 'Staff'}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div
+                  className="h-full w-full"
+                  style={{ backgroundColor: staff.color_hex || '#ccc' }}
+                />
+              )}
+            </div>
+          );
+
           return (
-            <button
+            <FilterPill
               key={staff.id}
+              label={staff.users?.first_name || 'Staff'}
+              isActive={isActive}
               onClick={() => onStaffSelect?.(staff.id)}
-              className={`group flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all shrink-0 ${isActive
-                  ? 'border-secondary bg-secondary/5 ring-1 ring-secondary'
-                  : 'border-outline-variant hover:bg-white bg-transparent'
-                }`}
-            >
-              <div className="h-6 w-6 overflow-hidden rounded-full border border-white">
-                {staff.users?.avatar_url ? (
-                  <img
-                    src={staff.users.avatar_url}
-                    alt={staff.users.first_name || 'Staff'}
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div
-                    className="h-full w-full"
-                    style={{ backgroundColor: staff.color_hex || '#ccc' }}
-                  />
-                )}
-              </div>
-              <span className={`text-sm font-medium ${isActive ? 'text-secondary font-bold' : 'text-secondary group-hover:text-primary'}`}>
-                {staff.users?.first_name}
-              </span>
-            </button>
+              icon={icon}
+              className="shrink-0"
+            />
           );
         })}
 
-        {/* Add Staff Button */}
-        <button className="p-2 rounded-full border border-dashed border-outline-variant hover:bg-surface-container transition-colors ml-2">
+        {/* Add Staff Button - kept as is as it's a specific action placeholder */}
+        <button className="p-2 rounded-full border border-dashed border-outline-variant hover:bg-surface-container transition-colors ml-2 active:scale-90">
           <Plus size={16} className="text-outline" />
         </button>
       </div>

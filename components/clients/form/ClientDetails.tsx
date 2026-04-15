@@ -4,6 +4,7 @@ import React from 'react';
 import { Fingerprint, Tag, Calendar } from 'lucide-react';
 import { FormInput } from '@/components/ui/FormInput';
 import { FormSelect } from '@/components/ui/FormSelect';
+import { FormTagInput } from '@/components/ui/FormTagInput';
 
 export function ClientDetails() {
   return (
@@ -30,14 +31,11 @@ export function ClientDetails() {
             { value: 'prefer_not_to_say', label: 'Prefer not to say' },
           ]}
         />
-        <div className="space-y-2">
-          <FormInput 
-            name="tags" 
-            label="Tags" 
-            placeholder="e.g. VIP, Regular" 
-            helperText="Separate tags with commas"
-          />
-        </div>
+        <FormTagInput 
+          name="tags" 
+          label="Tags" 
+          placeholder="e.g. VIP (Press Enter or comma)" 
+        />
       </div>
     </section>
   );

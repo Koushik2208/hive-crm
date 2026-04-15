@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import { z } from "zod";
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { 
-  ArrowLeft, 
-  Save, 
-  Loader2 
+import {
+  ArrowLeft,
+  Save,
+  Loader2
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import { ClientCreateSchema, ClientCreateInput } from '@/lib/validations/client.schema';
+import { ClientCreateSchema, ClientCreateInput, ClientCreateFormInput } from '@/lib/validations/client.schema';
 import { useCreateClient, useUpdateClient } from '@/hooks/useClients';
 import { Client } from '@/types/clients';
 
@@ -26,20 +26,8 @@ interface ClientFormProps {
   isEdit?: boolean;
 }
 
-// Internal type for form handling
-type ClientFormValues = Omit<ClientCreateInput, 'tags' | 'medicalFlags' | 'beautyNotes'> & {
-  tags: string;
-  medicalFlags: {
-    allergies: string;
-    conditions: string;
-    medications: string;
-  };
-  beautyNotes: {
-    hair_colour: string;
-    last_colour_date: string;
-    preferred_stylist: string;
-  };
-};
+// Internal type for form handling — use the input type for compatibility with zodResolver
+type ClientFormValues = ClientCreateFormInput;
 
 export default function ClientForm({ initialData, isEdit = false }: ClientFormProps) {
   const router = useRouter();
@@ -49,28 +37,21 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
   const [avatarPreview, setAvatarPreview] = useState<string | null>(initialData?.avatar_url || null);
 
   const methods = useForm<ClientFormValues>({
-    resolver: zodResolver(ClientCreateSchema.extend({
-      tags: z.string().optional(),
-      medicalFlags: z.object({
-        allergies: z.string().optional().default(""),
-        conditions: z.string().optional().default(""),
-        medications: z.string().optional().default(""),
-      }),
-    }) as any),
+    resolver: zodResolver(ClientCreateSchema),
     defaultValues: initialData ? {
       firstName: initialData.first_name || '',
       lastName: initialData.last_name || '',
-      email: initialData.email || '',
-      phone: initialData.phone || '',
-      dob: initialData.dob ? new Date(initialData.dob).toISOString().split('T')[0] : '',
+      email: initialData.email || undefined,
+      phone: initialData.phone || undefined,
+      dob: initialData.dob ? new Date(initialData.dob).toISOString().split('T')[0] : undefined,
       gender: (initialData.gender as any) || 'prefer_not_to_say',
       notes: initialData.notes || '',
-      tags: initialData.tags?.join(', ') || '',
-      avatarUrl: initialData.avatar_url || '',
+      tags: initialData.tags || [],
+      avatarUrl: initialData.avatar_url || undefined,
       medicalFlags: {
-        allergies: (initialData.medical_flags as any)?.allergies?.join(', ') || '',
-        conditions: (initialData.medical_flags as any)?.conditions?.join(', ') || '',
-        medications: (initialData.medical_flags as any)?.medications?.join(', ') || '',
+        allergies: (initialData.medical_flags as any)?.allergies || [],
+        conditions: (initialData.medical_flags as any)?.conditions || [],
+        medications: (initialData.medical_flags as any)?.medications || [],
       },
       beautyNotes: {
         hair_colour: (initialData.beauty_notes as any)?.hair_colour || '',
@@ -80,17 +61,17 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
     } : {
       firstName: '',
       lastName: '',
-      email: '',
-      phone: '',
-      dob: '',
+      email: undefined,
+      phone: undefined,
+      dob: undefined,
       gender: 'prefer_not_to_say',
       notes: '',
-      tags: '',
-      avatarUrl: '',
+      tags: [],
+      avatarUrl: undefined,
       medicalFlags: {
-        allergies: '',
-        conditions: '',
-        medications: '',
+        allergies: [],
+        conditions: [],
+        medications: [],
       },
       beautyNotes: {
         hair_colour: '',
@@ -102,25 +83,12 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
 
   const { handleSubmit, formState: { isSubmitting } } = methods;
 
-  const onSubmit = async (values: ClientFormValues) => {
+  const onSubmit = async (values: ClientCreateInput) => {
     try {
-      const splitString = (str: string) => str ? str.split(',').map(t => t.trim()).filter(Boolean) : [];
-
-      // Transform form data back to API structure
-      const submissionData: any = {
-        ...values,
-        tags: splitString(values.tags),
-        medicalFlags: {
-          allergies: splitString(values.medicalFlags.allergies),
-          conditions: splitString(values.medicalFlags.conditions),
-          medications: splitString(values.medicalFlags.medications),
-        },
-      };
-
       if (isEdit && initialData) {
-        await updateMutation.mutateAsync(submissionData);
+        await updateMutation.mutateAsync(values);
       } else {
-        await createMutation.mutateAsync(submissionData);
+        await createMutation.mutateAsync(values);
       }
       router.push('/clients');
     } catch (error) {
@@ -147,7 +115,7 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
         {/* Top Header & Global Actions */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-4">
-            <button 
+            <button
               onClick={() => router.back()}
               className="p-2 hover:bg-surface-container-high rounded-full transition-colors active:scale-95"
             >
@@ -157,8 +125,8 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
               {isEdit ? 'Edit Client Profile' : 'Add New Client'}
             </h2>
           </div>
-          <Button 
-            onClick={handleSubmit(onSubmit)}
+          <Button
+            onClick={handleSubmit(onSubmit as any)}
             disabled={isSubmitting}
             className="px-8 py-3.5 shadow-lg shadow-primary/10"
           >
@@ -173,11 +141,11 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
 
         {/* Form Container */}
         <div className="bg-surface-container-lowest rounded-[40px] p-12 shadow-ambient border border-outline-variant/10">
-          <form className="space-y-20" onSubmit={handleSubmit(onSubmit)}>
-            
-            <ClientBasicInfo 
-              avatarPreview={avatarPreview} 
-              onImageChange={handleImageChange} 
+          <form className="space-y-20" onSubmit={handleSubmit(onSubmit as any)}>
+
+            <ClientBasicInfo
+              avatarPreview={avatarPreview}
+              onImageChange={handleImageChange}
             />
 
             <ClientDetails />
@@ -185,7 +153,7 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
             <ClientClinicInfo />
 
             <ClientNotes />
-            
+
           </form>
         </div>
       </div>

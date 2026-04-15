@@ -202,7 +202,7 @@ model services {
   appointments       appointments[]
   invoice_items      invoice_items[]
   branches           branches?           @relation(fields: [branch_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  service_categories service_categories? @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  service_categories service_categories? @relation(fields: [category_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   tenants            tenants?            @relation(fields: [tenant_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@index([category_id], map: "idx_services_category")

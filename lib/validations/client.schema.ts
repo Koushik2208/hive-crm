@@ -34,3 +34,6 @@ export const ClientUpdateSchema = ClientCreateSchema.partial();
 
 export type ClientCreateInput = z.infer<typeof ClientCreateSchema>;
 export type ClientUpdateInput = z.infer<typeof ClientUpdateSchema>;
+
+// Input types (pre-transform) — required for useForm<> with zodResolver when using .default()
+export type ClientCreateFormInput = z.input<typeof ClientCreateSchema>;

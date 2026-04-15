@@ -56,7 +56,8 @@
 
   .text-title {
     font-size: clamp(1rem, 2vw, 1.375rem);
-    font-weight: 500; /* Medium */
+    font-weight: 500;
+    /* Medium */
   }
 
   .text-body-editorial {

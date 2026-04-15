@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { FormInput } from '@/components/ui/FormInput';
+import { FormTagInput } from '@/components/ui/FormTagInput';
+import { FormStaffSelect } from '@/components/ui/FormStaffSelect';
 import { ShieldCheck, Sparkles } from 'lucide-react';
 
 export function ClientClinicInfo() {
@@ -21,23 +23,20 @@ export function ClientClinicInfo() {
           </div>
 
           <div className="space-y-6">
-            <FormInput
+            <FormTagInput
               name="medicalFlags.allergies"
               label="Allergies"
-              placeholder="e.g. Latex, Nickel, Peanuts"
-              helperText="Separate with commas"
+              placeholder="e.g. Latex (Press Enter or comma)"
             />
-            <FormInput
+            <FormTagInput
               name="medicalFlags.conditions"
               label="Medical Conditions"
-              placeholder="e.g. Diabetes, Hypertension"
-              helperText="Separate with commas"
+              placeholder="e.g. Diabetes"
             />
-            <FormInput
+            <FormTagInput
               name="medicalFlags.medications"
               label="Current Medications"
-              placeholder="e.g. Aspirin, Retinol based creams"
-              helperText="Separate with commas"
+              placeholder="e.g. Aspirin"
             />
           </div>
         </div>
@@ -60,10 +59,10 @@ export function ClientClinicInfo() {
               label="Last Colour Service"
               type="date"
             />
-            <FormInput
+            <FormStaffSelect
               name="beautyNotes.preferred_stylist"
               label="Preferred Stylist"
-              placeholder="e.g. Kavya Nair"
+              placeholder="Select a stylist"
             />
           </div>
         </div>

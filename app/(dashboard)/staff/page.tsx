@@ -41,8 +41,10 @@ export default function StaffPage() {
                     <h1 className="text-4xl font-extrabold tracking-tight text-primary">Staff</h1>
                 </div>
                 <Link href="/staff/new">
-                    <Button variant="primary" className="px-8 py-3.5 rounded-xl font-bold tracking-tight ambient-shadow hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
-                        <UserPlus size={20} />
+                    <Button variant="primary"
+                        className="px-8 py-3.5 bg-linear-to-br from-primary to-primary-container text-white rounded-full font-bold shadow-lg shadow-primary/10 hover:shadow-xl hover:shadow-primary/20 transition-all active:scale-95"
+                    >
+                        <UserPlus size={20} className='mr-2' />
                         Add Staff
                     </Button>
                 </Link>

@@ -1,7 +1,12 @@
+'use client'
+
 import React from 'react';
 import { Search, Bell, UserCircle } from 'lucide-react';
+import { useSearchStore } from '@/stores/searchStore';
 
 export default function Topbar() {
+  const { searchQuery, setSearchQuery } = useSearchStore();
+
   return (
     <header className="sticky top-0 z-40 w-full bg-surface shadow-[0px_4px_16px_rgba(78,68,73,0.02)]">
       <div className="flex h-16 w-full max-w-[1920px] items-center justify-between px-8 mx-auto">
@@ -14,6 +19,8 @@ export default function Topbar() {
             <input
               type="text"
               placeholder="Search services, clients..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-64 rounded-full bg-surface-container-low pl-10 pr-4 py-1.5 text-sm text-primary placeholder-outline-variant focus:outline-none focus:ring-1 focus:ring-secondary transition-all"
             />
           </div>
