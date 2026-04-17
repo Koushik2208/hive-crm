@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 interface AppointmentCalendarDayProps {
   appointments: AppointmentWithDetails[];
   staffList: StaffProfileWithDetails[];
+  isSyncing?: boolean;
   onCellClick: (staffId: string, time: string) => void;
   onAppointmentClick: (appointment: AppointmentWithDetails) => void;
 }
@@ -13,6 +14,7 @@ interface AppointmentCalendarDayProps {
 export default function AppointmentCalendarDay({
   appointments,
   staffList,
+  isSyncing = false,
   onCellClick,
   onAppointmentClick
 }: AppointmentCalendarDayProps) {
@@ -128,9 +130,24 @@ export default function AppointmentCalendarDay({
                 </div>
               ))}
             </div>
+            
+            {/* Precision Hover Indicator Line - Spans Full Width across entire grid */}
+            {hoverInfo && (
+                <div
+                  className="absolute left-0 right-0 z-50 pointer-events-none flex items-center"
+                  style={{ top: `${hoverInfo.y + GRID_TOP_OFFSET - 1}px` }}
+                >
+                  <div className="w-20 shrink-0 flex justify-center sticky left-0 z-50 pointer-events-auto">
+                    <div className="bg-secondary text-white text-[0.65rem] font-bold px-2 py-0.5 rounded shadow-lg border border-white/20 whitespace-nowrap">
+                      {hoverInfo.time}
+                    </div>
+                  </div>
+                  <div className="flex-1 h-px bg-secondary/40 border-b border-dashed border-secondary/30" />
+                </div>
+              )}
 
             {/* Master Grid Content Container */}
-            <div className="flex-1 relative flex">
+            <div className={`flex-1 relative flex transition-opacity duration-300 ${isSyncing ? 'opacity-60 grayscale-[0.2]' : 'opacity-100'}`}>
               {/* Background Horizontal Grid Lines - Absolute behind columns */}
               <div className="absolute top-32 left-0 right-0 bottom-0 pointer-events-none z-0">
                 {hours.map((hour) => (
@@ -194,17 +211,6 @@ export default function AppointmentCalendarDay({
               })}
 
               {/* Precision Hover Indicator Line */}
-              {hoverInfo && (
-                <div
-                  className="absolute left-0 right-0 z-20 pointer-events-none flex items-center"
-                  style={{ top: `${hoverInfo.y + GRID_TOP_OFFSET}px` }}
-                >
-                  <div className="flex-1 h-px bg-secondary/30 border-b border-dashed border-secondary/20" />
-                  <div className="bg-secondary text-white text-[0.6rem] font-bold px-2 py-0.5 rounded-l-md shadow-sm">
-                    {hoverInfo.time}
-                  </div>
-                </div>
-              )}
 
               {/* Simulated Timeline Marker (LIVE) spans entire Grid Width */}
               {liveY && (

@@ -50,19 +50,19 @@ export function ClientClinicInfo() {
 
           <div className="space-y-6">
             <FormInput
-              name="beautyNotes.hair_colour"
-              label="Hair Colour Formula"
-              placeholder="e.g. Schwarzkopf 7.44 + 6%"
+              name="beautyNotes.service_preferences"
+              label="Service Preferences"
+              placeholder="e.g. Sensitive skin, prefers medium pressure, etc."
             />
             <FormInput
-              name="beautyNotes.last_colour_date"
-              label="Last Colour Service"
+              name="beautyNotes.last_service_date"
+              label="Last Visit Date"
               type="date"
             />
             <FormStaffSelect
-              name="beautyNotes.preferred_stylist"
-              label="Preferred Stylist"
-              placeholder="Select a stylist"
+              name="beautyNotes.preferred_provider"
+              label="Preferred Professional"
+              placeholder="Select professional"
             />
           </div>
         </div>

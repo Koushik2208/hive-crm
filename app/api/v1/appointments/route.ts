@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { type NextRequest } from "next/server";
+import { AppointmentCreateSchema } from "@/lib/validations/appointment.schema";
+import { getCurrentTenantId, getCurrentUser } from "@/lib/auth/session";
 
 /**
  * GET /api/v1/appointments
@@ -129,4 +131,90 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}
+
+/**
+ * POST /api/v1/appointments
+ * 
+ * Creates a new appointment.
+ * Handles automatic duration calculation and conflict detection.
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const validated = AppointmentCreateSchema.parse(body);
+    const tenantId = await getCurrentTenantId();
+    const user = await getCurrentUser();
+
+    // 1. Calculate End Time if not provided
+    let endsAt = validated.endsAt;
+    if (!endsAt) {
+      const service = await prisma.services.findUnique({
+        where: { id: validated.serviceId },
+        select: { duration_mins: true }
+      });
+
+      if (!service) {
+        return Response.json({ error: "Service not found" }, { status: 400 });
+      }
+
+      const duration = service.duration_mins || 60;
+      endsAt = new Date(validated.startsAt.getTime() + duration * 60000);
+    }
+
+    // 2. Conflict Detection (Same Staff Overlap)
+    // Rule: startsAt < existing.endsAt AND endsAt > existing.startsAt
+    const conflict = await prisma.appointments.findFirst({
+      where: {
+        tenant_id: tenantId,
+        staff_id: validated.staffId,
+        status: { notIn: ['cancelled'] },
+        AND: [
+          { starts_at: { lt: endsAt } },
+          { ends_at: { gt: validated.startsAt } }
+        ]
+      }
+    });
+
+    if (conflict) {
+      return Response.json({ 
+        error: "Scheduling Conflict", 
+        details: "This staff member is already booked at the selected time." 
+      }, { status: 409 });
+    }
+
+    // 3. Create Appointment
+    const appointment = await prisma.appointments.create({
+      data: {
+        id: crypto.randomUUID(),
+        tenant_id: tenantId,
+        branch_id: validated.branchId,
+        client_id: validated.clientId,
+        staff_id: validated.staffId,
+        service_id: validated.serviceId,
+        starts_at: validated.startsAt,
+        ends_at: endsAt,
+        status: validated.status,
+        notes: validated.notes,
+        created_by: null, // Bypassing for now until Auth is integrated
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      include: {
+        clients: true,
+        services: true,
+        staff_profiles: {
+          include: { users: true }
+        }
+      }
+    });
+
+    return Response.json({ data: appointment }, { status: 201 });
+  } catch (error: any) {
+    console.error("[POST /api/v1/appointments]", error);
+    if (error.name === "ZodError") {
+      return Response.json({ error: "Validation failed", details: error.errors }, { status: 400 });
+    }
+    return Response.json({ error: error.message || "Failed to create appointment" }, { status: 500 });
+  }
+}

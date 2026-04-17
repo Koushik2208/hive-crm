@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { useServiceCategories, useUpdateCategory, useDeleteCategory, useServices } from '@/hooks/useServices';
 import { Edit2, Trash2, Check, X, AlertCircle } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 
 const PREDEFINED_COLORS = [
   '#32172a', '#6c538b', '#f3e0c0', '#4a2c40', '#d1c3c9', '#9e8b7d'
@@ -14,11 +13,11 @@ export function CategoryManager() {
   const { data: servicesData } = useServices();
   const categories = categoriesData?.data || [];
   const services = servicesData?.data || [];
-  
+
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [editColor, setEditColor] = useState('');
-  
+
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const { mutate: updateCategory } = useUpdateCategory();
@@ -65,10 +64,10 @@ export function CategoryManager() {
             const serviceCount = getServiceCount(category.id);
 
             return (
-              <div 
+              <div
                 key={category.id}
                 className={`
-                  p-5 rounded-[2rem] transition-all duration-300 group
+                  p-5 rounded-4xl transition-all duration-300 group
                   ${isEditing ? 'bg-surface-container-high ring-1 ring-secondary/20 shadow-lg' : 'bg-surface-container-low hover:bg-surface-container'}
                 `}
               >
@@ -76,19 +75,19 @@ export function CategoryManager() {
                   <div className="space-y-6">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold tracking-widest text-primary/40 ml-1">Category Name</label>
-                      <input 
+                      <input
                         className="w-full bg-transparent border-b border-outline-variant/30 py-2 text-primary font-bold focus:outline-none focus:border-secondary transition-colors"
                         value={editName}
                         onChange={(e) => setEditName(e.target.value)}
                         autoFocus
                       />
                     </div>
-                    
+
                     <div className="space-y-3">
                       <label className="text-[10px] uppercase font-bold tracking-widest text-primary/40 ml-1">Color Indicator</label>
                       <div className="flex flex-wrap gap-4 pt-1">
                         {PREDEFINED_COLORS.map(color => (
-                          <button 
+                          <button
                             key={color}
                             onClick={() => setEditColor(color)}
                             className={`w-8 h-8 rounded-full transition-transform ${editColor === color ? 'ring-2 ring-primary ring-offset-2 scale-90' : 'hover:scale-110'}`}
@@ -114,7 +113,7 @@ export function CategoryManager() {
                       <div className="space-y-1">
                         <p className="font-bold text-sm">Delete "{category.name}"?</p>
                         <p className="text-xs opacity-70 leading-relaxed">
-                          {serviceCount > 0 
+                          {serviceCount > 0
                             ? `${serviceCount} services will be moved to "Uncategorized". This action is permanent.`
                             : "This category is empty and safe to delete."
                           }
@@ -122,13 +121,13 @@ export function CategoryManager() {
                       </div>
                     </div>
                     <div className="flex justify-end gap-3 mt-1">
-                      <button 
+                      <button
                         onClick={() => setConfirmDeleteId(null)}
                         className="px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-primary transition-colors"
                       >
                         Cancel
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(category.id)}
                         className="px-4 py-2 bg-error text-white text-xs font-bold rounded-full hover:bg-error/90 transition-colors shadow-sm"
                       >
@@ -139,8 +138,8 @@ export function CategoryManager() {
                 ) : (
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div 
-                        className="w-4 h-4 rounded-full shadow-inner" 
+                      <div
+                        className="w-4 h-4 rounded-full shadow-inner"
                         style={{ backgroundColor: category.color_hex || '#d1c3c9' }}
                       />
                       <div>
@@ -151,13 +150,13 @@ export function CategoryManager() {
                       </div>
                     </div>
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
+                      <button
                         onClick={() => handleStartEdit(category)}
                         className="p-2.5 text-on-surface-variant/40 hover:text-primary hover:bg-surface-container-highest rounded-full transition-all"
                       >
                         <Edit2 size={16} />
                       </button>
-                      <button 
+                      <button
                         onClick={() => setConfirmDeleteId(category.id)}
                         className="p-2.5 text-on-surface-variant/40 hover:text-error hover:bg-error-container/10 rounded-full transition-all"
                       >

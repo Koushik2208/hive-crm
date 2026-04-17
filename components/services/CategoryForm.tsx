@@ -60,7 +60,7 @@ export function CategoryForm({ onSuccess, onCancel }: CategoryFormProps) {
 
         {/* Color Sector */}
         <div className="space-y-4">
-          <label className="text-[10px] uppercase font-bold tracking-[0.1em] text-primary/60 ml-1">
+          <label className="text-[10px] uppercase font-bold tracking-widest text-primary/60 ml-1">
             Select Color Indicator
           </label>
           <div className="flex flex-wrap gap-5 ml-1">
@@ -73,8 +73,8 @@ export function CategoryForm({ onSuccess, onCancel }: CategoryFormProps) {
                   onClick={() => setSelectedColor(color)}
                   className={`
                     w-10 h-10 rounded-full transition-all duration-300 
-                    ${isSelected 
-                      ? 'ring-2 ring-primary ring-offset-4 ring-offset-surface scale-90 shadow-lg shadow-primary/20' 
+                    ${isSelected
+                      ? 'ring-2 ring-primary ring-offset-4 ring-offset-surface scale-90 shadow-lg shadow-primary/20'
                       : 'hover:scale-110 shadow-sm'
                     }
                   `}
@@ -97,7 +97,7 @@ export function CategoryForm({ onSuccess, onCancel }: CategoryFormProps) {
           <Button
             type="submit"
             disabled={isLoading || !name.trim()}
-            className="px-10 py-3.5 bg-gradient-to-br from-primary to-primary-container text-white rounded-full font-bold shadow-xl shadow-primary/20 hover:scale-[1.05] active:scale-95 transition-all"
+            className="px-10 py-3.5 bg-linear-to-br from-primary to-primary-container text-white rounded-full font-bold shadow-xl shadow-primary/20 hover:scale-[1.05] active:scale-95 transition-all"
           >
             {isLoading ? 'Saving...' : 'Save Category'}
           </Button>

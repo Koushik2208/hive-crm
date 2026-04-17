@@ -53,10 +53,14 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
         conditions: (initialData.medical_flags as any)?.conditions || [],
         medications: (initialData.medical_flags as any)?.medications || [],
       },
-      beautyNotes: {
-        hair_colour: (initialData.beauty_notes as any)?.hair_colour || '',
-        last_colour_date: (initialData.beauty_notes as any)?.last_colour_date || '',
-        preferred_stylist: (initialData.beauty_notes as any)?.preferred_stylist || '',
+      beautyNotes: initialData ? {
+        service_preferences: (initialData.beauty_notes as any)?.service_preferences || (initialData.beauty_notes as any)?.hair_colour || '',
+        last_service_date: (initialData.beauty_notes as any)?.last_service_date || (initialData.beauty_notes as any)?.last_colour_date || '',
+        preferred_provider: (initialData.beauty_notes as any)?.preferred_provider || (initialData.beauty_notes as any)?.preferred_stylist || '',
+      } : {
+        service_preferences: '',
+        last_service_date: '',
+        preferred_provider: '',
       },
     } : {
       firstName: '',
@@ -74,9 +78,9 @@ export default function ClientForm({ initialData, isEdit = false }: ClientFormPr
         medications: [],
       },
       beautyNotes: {
-        hair_colour: '',
-        last_colour_date: '',
-        preferred_stylist: '',
+        service_preferences: '',
+        last_service_date: '',
+        preferred_provider: '',
       },
     }
   });

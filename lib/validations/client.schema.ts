@@ -20,13 +20,13 @@ export const ClientCreateSchema = z.object({
     medications: [],
   }),
   beautyNotes: z.object({
-    hair_colour: z.string().optional().default(""),
-    last_colour_date: z.string().optional().default(""),
-    preferred_stylist: z.string().optional().default(""),
+    service_preferences: z.string().optional().default(""),
+    last_service_date: z.string().optional().default(""),
+    preferred_provider: z.string().optional().default(""),
   }).optional().default({
-    hair_colour: "",
-    last_colour_date: "",
-    preferred_stylist: "",
+    service_preferences: "",
+    last_service_date: "",
+    preferred_provider: "",
   }),
 });
 

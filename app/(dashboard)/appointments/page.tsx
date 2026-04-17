@@ -155,13 +155,24 @@ function AppointmentsPageContent() {
 
       {/* Main Content Area */}
       <div className="flex-1 min-h-0 flex flex-col relative">
+        {/* Global Loading Overlay for Re-fetching */}
+        {(isLoading && (appointments.length > 0 || staffList.length > 0)) && (
+          <div className="absolute top-4 right-8 z-50 flex items-center gap-2 bg-surface/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-outline-variant/20 shadow-sm transition-all animate-in fade-in slide-in-from-top-2">
+            <Loader2 className="animate-spin w-3.5 h-3.5 text-primary" />
+            <span className="text-[0.65rem] font-bold text-primary uppercase tracking-wider">Syncing...</span>
+          </div>
+        )}
+
         {error ? (
           <div className="flex items-center justify-center p-12 text-error font-medium">
-            Error loading appointments: {error}
+            Error loading appointments: {error.message || error}
           </div>
         ) : isLoading && appointments.length === 0 && staffList.length === 0 ? (
-          <div className="flex items-center justify-center p-12 text-outline">
-            <Loader2 className="animate-spin w-8 h-8" />
+          <div className="flex-1 flex items-center justify-center p-12 text-outline">
+             <div className="flex flex-col items-center gap-4">
+                <Loader2 className="animate-spin w-10 h-10 text-primary/40" />
+                <p className="text-xs font-medium uppercase tracking-widest text-on-surface-variant/40">Initializing calendar...</p>
+             </div>
           </div>
         ) : (
           <>
@@ -207,18 +218,20 @@ function AppointmentsPageContent() {
         title={drawerProps.isEdit ? 'Edit Appointment' : 'New Appointment'}
         subtitle={
           drawerProps.isEdit ? (
-            <button className="text-[0.7rem] uppercase tracking-widest text-error/60 font-bold hover:text-error transition-colors mt-1 block">
-              Delete Appointment
-            </button>
+            <span className="text-[0.7rem] uppercase tracking-widest text-on-surface-variant/60 font-bold mt-1 block">
+              Manage Details
+            </span>
           ) : (
             <span className="text-[0.7rem] uppercase tracking-widest text-on-surface-variant/40 font-bold mt-1 block">
-              Draft Mode
+              Schedule New
             </span>
           )
         }
       >
         <AppointmentForm
           {...drawerProps}
+          calendarDate={currentDate}
+          staffList={staffList}
           onClose={handleCloseDrawer}
         />
       </Drawer>

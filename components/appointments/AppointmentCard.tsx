@@ -20,10 +20,18 @@ export default function AppointmentCard({ appointment, onClick, onMouseEnter }: 
   const minutesSince9AM = (startHour - 9) * 60 + startMinutes;
   const pixelsPerMinute = 160 / 60;
 
-  // The column header natively provides our 48px top offset now, 
-  // so top=0 correctly corresponds to 09:00 AM visually against the grid lines.
-  const topPosition = minutesSince9AM * pixelsPerMinute;
-  const height = (appointment.services?.duration_mins || 60) * pixelsPerMinute;
+  // The column starts after the header (80px), but the 09:00 AM grid line is at 128px.
+  // We add 48px (128-80) offset so top position 0 lines up with the first line.
+  const GRID_ALIGN_OFFSET = 48;
+  const topPosition = (minutesSince9AM * pixelsPerMinute) + GRID_ALIGN_OFFSET;
+
+  // Calculate actual duration in minutes based on starts_at and ends_at
+  const endsAt = appointment.ends_at ? new Date(appointment.ends_at) : null;
+  const actualDuration = endsAt 
+    ? Math.round((endsAt.getTime() - start.getTime()) / 60000)
+    : (appointment.services?.duration_mins || 60);
+
+  const height = actualDuration * pixelsPerMinute;
 
   // Derive styles based on status
   let borderClass = 'border-primary';
@@ -92,7 +100,7 @@ export default function AppointmentCard({ appointment, onClick, onMouseEnter }: 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
           <div className="flex items-center gap-1 text-[0.65rem] text-outline font-medium">
             <Clock size={14} />
-            {appointment.starts_at && formatTime(appointment.starts_at)} ({appointment.services?.duration_mins} min)
+            {appointment.starts_at && formatTime(appointment.starts_at)} ({actualDuration} min)
           </div>
           <div className="flex items-center gap-1 text-[0.65rem] text-outline font-medium">
             <User size={14} />

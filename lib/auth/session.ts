@@ -5,7 +5,7 @@
  */
 
 export const MOCK_TENANT_ID = "a1b2c3d4-0001-0001-0001-000000000001"; // Lumina Beauty Studio
-export const MOCK_USER_ID = "u1000000-0001-0001-0001-000000000002";   // Priya Sharma (Owner)
+export const MOCK_USER_ID = "f1000000-0001-0001-0001-000000000002";   // Priya Sharma (Owner)
 
 export async function getCurrentTenantId(): Promise<string> {
   return MOCK_TENANT_ID;

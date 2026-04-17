@@ -776,7 +776,7 @@ SUPABASE_STORAGE_BUCKET_IMAGES=treatment-images
 - [x] **M1 — Clients:** CRUD, search, profile page (completed with API integration)
 - [ ] **M4 — Staff:** Profiles, availability grid
 - [ ] **M3 — Services:** Categories, service list, per-branch pricing
-- [ ] **M1 — Appointments:** Availability checker, calendar, booking form, status flow
+- [x] **M1 — Appointments:** Availability checker, calendar, booking form, status flow (Stabilized)
 - [ ] **M2 — Billing/POS:** Invoice creation from appointment, payment modal, receipt email
 
 ### Integrations
@@ -798,13 +798,23 @@ SUPABASE_STORAGE_BUCKET_IMAGES=treatment-images
 
 ## 13. Lessons Learned & Best Practices (The Blueprint)
 
-This section documents repeated patterns and architectural decisions to ensure consistency and avoid common regressions.
+This project maintains a living document of standards in [PROJECT_STANDARDS.md](file:///d:/Next%20JS/hive-crm/PROJECT_STANDARDS.md). All contributors must review it before writing code.
 
-### 13.1 Form Architecture
+### 13.1 Most Critical Lessons
+- **Form State Sync:** Always use `camelCase` for form fields and map to `snake_case` in the API. This maintains project consistency and prevents "Missing Field" errors.
+- **Type Safety Strategy:** Distinguish between `z.input` (for `useForm`) and `z.output` (for API payloads). This resolves 90% of TypeScript `Resolver` mismatch errors.
+- **Validation Precision:** When using `z.preprocess` to sanitize empty strings into `null`, ensure `.optional().nullable()` is the **outermost** wrapper.
+- **Layout Integrity:** Use `PageContainer` as the absolute root for all dashboard pages to manage consistent padding and scrolling.
+- **Theme Consistency:** Stick strictly to established design tokens (e.g., `bg-surface-container-low`) and semantic utilities like `shadow-ambient`.
+
+### 13.2 Database Patterns
+- **Atomic Writes:** Use Prisma `$transaction` for all cross-table creations (e.g., Staff + User + Availability).
+- **Hard-Deletes vs. Soft-Deletes:** For transactional data like availability, use a "Delete-and-Recreate" pattern on update for simplicity and reliability.
+
+### 13.3 Form Architecture
 - **FormProvider Over Prop-Drilling**: For all non-trivial forms, utilize the `FormProvider` pattern. This allows specialized sub-sections (e.g., `ClientBasicInfo`, `ServicePricing`) to access form context via `useFormContext` without complex prop-drilling.
 - **Form Standardization**: Always use the modular `FormInput`, `FormSelect`, and `FormTextArea` components from `components/ui/` to ensure consistent error handling, typography, and styling.
 
-### 13.2 Data Integrity & Validation
 - **Relation ID Handling**: Database relations (UUIDs like `branch_id` or `category_id`) must be initialized as `null` (not `""`) when unassigned. 
 - **Zod Robustness**: Update schemas to handle potential empty strings (`""`) from UI "Select" fields by using `z.preprocess`. This ensures the value is converted to `null` **before** any validation rules like `.uuid()` or `.min()` run.
     - *Pattern*: `z.preprocess((val) => (val === "" ? null : val), z.string().uuid().optional().nullable())`
@@ -820,3 +830,9 @@ This section documents repeated patterns and architectural decisions to ensure c
 
 ### 13.4 Logic Splitting
 - Maintain the practice of splitting complex forms into domain-specific sub-components (e.g., `form/ServiceBasicInfo.tsx`). This localized logic is easier to test and maintain than monolithic form files.
+
+### 13.5 Stability & Mock Patterns (The "Bridge" Philosophy)
+- **Data Integrity Over Mock Simplicity**: NEVER use placeholder prefixes like `u1000...` for `@db.Uuid` columns. The database enforces hexadecimal strictly.
+- **Audit Neutralization**: Set audit fields (`created_by`) to `nullable` during the pre-auth dev phase to prevent foreign-key crashes.
+- **Rendering Truth**: Always calculate UI heights and labels from actual record timestamps (`starts_at`, `ends_at`) rather than static master-data values (`services.duration_mins`).
+- **Response Uniformity**: Ensure all API success paths return a valid JSON object (e.g., `{ "success": true }`) to prevent client-side parsing failures.

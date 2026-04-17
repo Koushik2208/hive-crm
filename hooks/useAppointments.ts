@@ -1,21 +1,11 @@
-"use client";
-
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AppointmentWithDetails, StaffProfileWithDetails } from '@/types';
-
-interface AppointmentsData {
-  appointments: AppointmentWithDetails[];
-  staffList: StaffProfileWithDetails[];
-}
+import { AppointmentCreateInput, AppointmentUpdateInput } from '@/lib/validations/appointment.schema';
 
 /**
  * Hook to fetch appointments and staff for the calendar.
- * Uses TanStack Query for caching, re-fetching, and unified data management.
  */
 export function useAppointments(dateFrom: string, dateTo: string) {
-  // We fetch both in parallel via a single query or separate ones.
-  // Separate ones are better for caching granularity.
-  
   const staffQuery = useQuery({
     queryKey: ['staff', 'active'],
     queryFn: async () => {
@@ -34,19 +24,96 @@ export function useAppointments(dateFrom: string, dateTo: string) {
       const json = await res.json();
       return json.data as AppointmentWithDetails[];
     },
-    // Keep data fresh longer for the calendar but allow background updates
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 
   return {
     appointments: appointmentsQuery.data || [],
     staffList: staffQuery.data || [],
     isLoading: staffQuery.isLoading || appointmentsQuery.isLoading,
+    isRefetching: appointmentsQuery.isRefetching,
     isError: staffQuery.isError || appointmentsQuery.isError,
-    error: (staffQuery.error || appointmentsQuery.error) as string | null,
+    error: (staffQuery.error || appointmentsQuery.error) as any,
     refetch: () => {
       staffQuery.refetch();
       appointmentsQuery.refetch();
     }
   };
+}
+
+/**
+ * Mutation to create a new appointment
+ */
+export function useCreateAppointment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: AppointmentCreateInput) => {
+      const res = await fetch('/api/v1/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to create appointment');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+  });
+}
+
+/**
+ * Mutation to update/reschedule an appointment
+ */
+export function useUpdateAppointment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: AppointmentUpdateInput }) => {
+      const res = await fetch(`/api/v1/appointments/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to update appointment');
+      }
+      return res.json();
+    },
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+      queryClient.invalidateQueries({ queryKey: ['appointments', variables.id] });
+    },
+  });
+}
+
+/**
+ * Mutation to delete an appointment
+ */
+export function useDeleteAppointment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/v1/appointments/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Failed to delete appointment');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments'] });
+    },
+  });
 }

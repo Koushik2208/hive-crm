@@ -39,16 +39,16 @@ export default function Modal({
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 animate-in fade-in duration-300">
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-primary/20 backdrop-blur-[2px] transition-opacity cursor-pointer" 
+      <div
+        className="fixed inset-0 bg-primary/20 backdrop-blur-[2px] transition-opacity cursor-pointer"
         onClick={onClose}
       />
-      
+
       {/* Modal Surface */}
-      <div 
+      <div
         className={`
           relative bg-surface w-full ${maxWidth} rounded-[3rem] p-10 
-          shadow-[0px_12px_32px_rgba(78,68,73,0.06)] 
+          shadow-ambient 
           animate-in zoom-in-95 duration-300 ring-1 ring-black/5
         `}
       >

@@ -32,16 +32,16 @@ export function FilterPill({
     >
       {/* Icon Prefix (e.g. Avatar) */}
       {icon && (
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           {icon}
         </div>
       )}
 
       {/* Color Dot Indicator */}
       {colorIndicator && !icon && (
-        <div 
+        <div
           className={`w-1.5 h-1.5 rounded-full transition-transform duration-300 ${isActive ? 'scale-125 bg-white' : ''}`}
-          style={{ backgroundColor: isActive ? '#fff' : colorIndicator }} 
+          style={{ backgroundColor: isActive ? '#fff' : colorIndicator }}
         />
       )}
 
